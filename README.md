@@ -6,13 +6,17 @@ A BSD-licensed core for Yamaha's V9958 © 2024 Sehyeon Kim(Raki)
 
 ✅CPU bus interface(register RW)
 
+✅DRAM interface
+
 ▶️Register file
 
-▶️DRAM interface
+⬜ALU
 
 ⬜Tilemap logic
 
 ⬜Sprite logic
+
+⬜Palette RAM
 
 ⬜Misc
 
