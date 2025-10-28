@@ -7,7 +7,7 @@ A BSD-licensed core for Yamaha's V9958 © 2024 Sehyeon Kim(Raki)
 ✅**CI** - CPU bus interface (register RW)<br>
 ✅**DI** - DRAM interface<br>
 ▶️**REG** - Register file<br>
-✅**VT** V- ideo timing<br>
+✅**ST** - Screen timing<br>
 ▶️Tilemap logic(PLA)<br>
 ⬜Sprite logic<br>
 ✅ALU<br>
