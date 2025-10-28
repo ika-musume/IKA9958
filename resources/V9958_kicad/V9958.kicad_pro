@@ -387,7 +387,7 @@
     },
     "net_format_name": "",
     "page_layout_descr_file": "",
-    "plot_directory": "",
+    "plot_directory": "C:/Users/kiki1/Documents/GitHub/IKA9958/resources/",
     "spice_current_sheet_as_root": false,
     "spice_external_command": "spice \"%I\"",
     "spice_model_current_sheet_as_root": true,
@@ -424,7 +424,7 @@
     ],
     [
       "41d79d59-b2f3-48e9-9694-080ecc0201c0",
-      "HVCNTR"
+      "ST"
     ]
   ],
   "text_variables": {}

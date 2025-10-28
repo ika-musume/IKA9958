@@ -2,7 +2,7 @@
 	(version 20231120)
 	(generator "eeschema")
 	(generator_version "8.0")
-	(uuid "7af45478-efca-4490-a488-0c4ca65ae916")
+	(uuid "c2f19680-ef1e-44c8-b1b2-daf04d384cc1")
 	(paper "A0")
 	(title_block
 		(title "V9958")
@@ -10,4 +10,9 @@
 		(company "IKA Microelectronics Inc.")
 	)
 	(lib_symbols)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
 )
