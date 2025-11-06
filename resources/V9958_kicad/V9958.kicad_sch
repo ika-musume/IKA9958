@@ -6,7 +6,7 @@
 	(paper "A0")
 	(title_block
 		(title "V9958")
-		(date "2024-09-13")
+		(date "2025-11-06")
 		(rev "WIP")
 		(company "IKA Microelectronics Inc.")
 	)
@@ -44,7 +44,7 @@
 		(instances
 			(project "V9958"
 				(path "/b5e1370a-fef4-4131-9314-bdfc21cb5e0f"
-					(page "3")
+					(page "4")
 				)
 			)
 		)
@@ -82,7 +82,7 @@
 		(instances
 			(project "V9958"
 				(path "/b5e1370a-fef4-4131-9314-bdfc21cb5e0f"
-					(page "6")
+					(page "7")
 				)
 			)
 		)
@@ -120,7 +120,7 @@
 		(instances
 			(project "V9958"
 				(path "/b5e1370a-fef4-4131-9314-bdfc21cb5e0f"
-					(page "2")
+					(page "5")
 				)
 			)
 		)
@@ -158,7 +158,45 @@
 		(instances
 			(project "V9958"
 				(path "/b5e1370a-fef4-4131-9314-bdfc21cb5e0f"
-					(page "7")
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 31.75 304.8)
+		(size 26.67 12.7)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "500ef634-2477-470b-aded-9c1f49faaddd")
+		(property "Sheetname" "RCC"
+			(at 31.75 304.0884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "RCC.kicad_sch"
+			(at 31.75 318.0846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "V9958"
+				(path "/b5e1370a-fef4-4131-9314-bdfc21cb5e0f"
+					(page "1")
 				)
 			)
 		)
@@ -196,7 +234,7 @@
 		(instances
 			(project "V9958"
 				(path "/b5e1370a-fef4-4131-9314-bdfc21cb5e0f"
-					(page "5")
+					(page "6")
 				)
 			)
 		)
@@ -234,7 +272,7 @@
 		(instances
 			(project "V9958"
 				(path "/b5e1370a-fef4-4131-9314-bdfc21cb5e0f"
-					(page "4")
+					(page "3")
 				)
 			)
 		)
