@@ -53,37 +53,59 @@ endgenerate
 
 
 
+logic gc024 = 1'b1;
+
+
+
+
 ///////////////////////////////////////////////////////////
-//////  Clock Divider
+//////  phiL/phiH Clock Divider
 ////
 
-logic           genlock_z, nor4_z;
+logic           clksync_z, nor4_z;
 logic   [2:0]   cdiv_sr0, cdiv_sr1, cdiv_sr2;
 logic           ref_phiL, ref_phiH; //reference internal clock
 
-assign  o_DLCLK_n = ~ref_phiL | REG.regfile[9][0];
+assign  o_DLCLK_n = ~ref_phiL | REG.regfile[9][0]; //R#9 bit0 DC
 assign  o_DHCLK_n = ~ref_phiH;
 
 always_ff @(posedge RCC.phiA or negedge i_RST_n) begin
     if(!i_RST_n) begin
-        //original chip doesn't have reset
-        genlock_z <= 1'b0; nor4_z <= 1'b0;
+        //original chip doesn't have reset, all dynamic shift registers
+        clksync_z <= 1'b0; nor4_z <= 1'b0;
         cdiv_sr0 <= 3'b000; cdiv_sr1 <= 3'b000; cdiv_sr2 <= 3'b000;
         ref_phiL <= 1'b0; ref_phiH <= 1'b0;
     end
     else begin if(RCC.phiA_NCEN) begin
-        genlock_z   <= ~i_DLCLK_n;
-        nor4_z      <= ~|{|{cdiv_sr2[2:1]}, ST.n_gc024, REG.regfile[9][0]};
+        clksync_z   <= ~i_DLCLK_n;
+        nor4_z      <= ~|{~cdiv_sr2[2], cdiv_sr2[1], gc024, REG.regfile[9][0]};
 
-        cdiv_sr0    <= {cdiv_sr0[1:0], genlock_z & REG.regfile[9][0]}; //R#9 bit0 DC
-        cdiv_sr1    <= {cdiv_sr1[1:0], ~|{|{cdiv_sr1}, |{cdiv_sr0[2:1]}, nor4_z}};
-        cdiv_sr2    <= {cdiv_sr2[1:0], ~|{cdiv_sr1[2:1]}};
+        cdiv_sr0    <= {cdiv_sr0[1:0], clksync_z & REG.regfile[9][0]}; //This SR delays the DLCLK input
+        cdiv_sr1    <= {cdiv_sr1[1:0], ~|{|{cdiv_sr1}, |{cdiv_sr0[2:1]}, nor4_z}}; //This SR acts as a ring counter(div4)
+        cdiv_sr2    <= {cdiv_sr2[1:0], ~|{cdiv_sr1[1:0]}}; //This SR adds a delay for clock pause
 
         //reference internal clock; super duper SR latch inverts the clock output
         ref_phiL    <= |{cdiv_sr1[1:0]};
         ref_phiH    <= |{cdiv_sr1[2], cdiv_sr1[0]};
     end end
 end
+
+//div2 CEN
+assign  RCC.phiH_PCEN = (cdiv_sr1 == 3'b001 | cdiv_sr1 == 3'b100) & RCC.phiA_NCEN;
+assign  RCC.phiH_NCEN = ((cdiv_sr1 == 3'b000 & cdiv_sr2 == 3'b001) | cdiv_sr1 == 3'b010) & RCC.phiA_NCEN;
+
+//div4 CEN
+assign  RCC.phiL_PCEN = (cdiv_sr1 == 3'b001) & RCC.phiA_NCEN;
+assign  RCC.phiL_NCEN = (cdiv_sr1 == 3'b100) & RCC.phiA_NCEN;
+
+
+
+///////////////////////////////////////////////////////////
+//////  Power On Reset
+////
+
+
+
 
 
 

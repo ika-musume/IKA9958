@@ -15,7 +15,8 @@ module IKA9958 #(parameter CM = 0) (
     output  wire                o_DHCLK_n, o_DLCLK_n, //open drain output
 
     /* RESET INPUT */
-    input   wire                i_RST_n
+    input   wire                i_RST_n,
+    input   wire                i_HRST_n
 );
 
 
@@ -34,7 +35,7 @@ IKA9958_if_st   if_st();
 //////  Reset and Clock Control
 ////
 
-IKA9958_rcc #(.CM(0)) u_rcc (
+IKA9958_rcc #(.CM(CM)) u_rcc (
     .i_XTAL1                    (i_XTAL1                    ),
     .o_XTAL2                    (o_XTAL2                    ),
     .i_XTAL_NCEN                (i_XTAL_NCEN                ),
@@ -68,6 +69,8 @@ IKA9958_reg u_reg (
 ////
 
 IKA9958_st u_st (
+    .i_HRST_n                   (i_HRST_n                   ),
+
     .RCC                        (if_rcc                     ),
     .REG                        (if_reg                     ),
     .ST                         (if_st                      )
