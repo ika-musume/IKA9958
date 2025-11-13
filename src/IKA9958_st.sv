@@ -39,14 +39,14 @@ end
 
 
 
-assign  ST.n_gc024 = 1'b1;
+assign  ST.gc024 = 1'b1;
 
 endmodule
 
 interface IKA9958_if_st;
-wire            n_gc024;
+wire            gc024;
 
 //clarify directionality
-modport drive   (output n_gc024);
-modport source  (input  n_gc024);
+modport drive   (output gc024);
+modport source  (input  gc024);
 endinterface

@@ -36,6 +36,8 @@ IKA9958_if_st   if_st();
 ////
 
 IKA9958_rcc #(.CM(CM)) u_rcc (
+    .i_RST_n                    (i_RST_n                    ),
+    
     .i_XTAL1                    (i_XTAL1                    ),
     .o_XTAL2                    (o_XTAL2                    ),
     .i_XTAL_NCEN                (i_XTAL_NCEN                ),
@@ -43,8 +45,6 @@ IKA9958_rcc #(.CM(CM)) u_rcc (
     .i_DLCLK_n                  (i_DLCLK_n                  ),
     .o_DHCLK_n                  (o_DHCLK_n                  ),
     .o_DLCLK_n                  (o_DLCLK_n                  ),
-
-    .i_RST_n                    (i_RST_n                    ),
 
     .RCC                        (if_rcc                     ),
     .REG                        (if_reg                     ),
