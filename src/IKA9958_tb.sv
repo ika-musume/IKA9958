@@ -22,9 +22,10 @@ wire NCEN = CLKDIV == 3;
 always @(posedge CLK) CLKDIV = CLKDIV + 2'd1;
 
 //async reset
-logic RST_n = 1'b1;
+logic RST_n = 1'b0;
 initial begin 
-    #60 RST_n = 1'b0;
+    #60 RST_n = 1'b1;
+    #200 RST_n = 1'b0;
     #175 RST_n = 1'b1;
 end
 
@@ -35,6 +36,7 @@ IKA9958 #(.CM(1)) u_dut (
     .i_XTAL_NCEN                (NCEN                       ),
 
     .i_DLCLK_n                  (DLCLK                      ),
+    
     .o_DHCLK_n                  (                           ),
     .o_DLCLK_n                  (                           ),
 

@@ -15,8 +15,9 @@ module IKA9958_rcc #(parameter CM = 0) (
     input   wire                i_DLCLK_n, //multi V9958?
 
     /* CLOCK OUTPUTS */
-    output  wire                o_DHCLK_n, o_DLCLK_n, //open drain output
-    output  wire                o_CPUCLK_nVDS,
+    output  wire                o_DHCLK_n, o_DHCLK_n_PCEN, o_DHCLK_n_NCEN, //open drain output
+    output  wire                o_DLCLK_n, o_DLCLK_n_PCEN, o_DLCLK_n_NCEN, //open drain output
+    output  wire                o_CPUCLK, o_CPUCLK_PCEN, o_CPUCLK_NCEN, //Z80 clock
 
     /* INTERFACES */
     IKA9958_if_rcc.drive        RCC, //reset and clock control
@@ -65,12 +66,9 @@ logic   [2:0]   cdiv_sr1 = 3'd0;
 logic   [2:0]   cdiv_sr2 = 3'd0;
 logic           ref_phiL, ref_phiH; //reference internal clock
 
-assign  o_DLCLK_n = ~ref_phiL | REG.regfile[9][0]; //R#9 bit0 DC
-assign  o_DHCLK_n = ~ref_phiH;
-
 `ifdef IKA9958_ADD_RCC_RST
 //optional register reset
-always_ff @(posedge RCC.phiA or negedge i_RST_n) begin
+always_ff @(posedge RCC.phiA `ifdef IKA9958_SYNC_RST ) `else or negedge RCC.RST_async_n) begin `endif
     if(!i_RST_n) begin
         //original chip doesn't have reset, all dynamic shift registers
         clksync_z <= 1'b0; nor4_z <= 1'b0;
@@ -103,6 +101,14 @@ assign  RCC.phiH_NCEN = ((cdiv_sr1 == 3'b000 & cdiv_sr2 == 3'b001) | cdiv_sr1 ==
 assign  RCC.phiL_PCEN = (cdiv_sr1 == 3'b001) & RCC.phiA_NCEN;
 assign  RCC.phiL_NCEN = (cdiv_sr1 == 3'b100) & RCC.phiA_NCEN;
 
+//clock outputs
+assign  o_DHCLK_n = ~ref_phiH;
+assign  o_DHCLK_n_PCEN = RCC.phiH_NCEN;
+assign  o_DHCLK_n_NCEN = RCC.phiH_PCEN;
+assign  o_DLCLK_n = ~ref_phiL | REG.regfile[9][0]; //R#9 bit0 DC
+assign  o_DLCLK_n_PCEN = RCC.phiL_NCEN;
+assign  o_DLCLK_n_NCEN = RCC.phiL_PCEN;
+
 
 
 ///////////////////////////////////////////////////////////
@@ -111,6 +117,9 @@ assign  RCC.phiL_NCEN = (cdiv_sr1 == 3'b100) & RCC.phiA_NCEN;
 
 logic   [6:0]   cdiv_sr4 = 7'd0;
 logic   [1:0]   cpuclk, cpuclk_pcen, cpuclk_ncen;
+assign  o_CPUCLK = cpuclk[1];
+assign  o_CPUCLK_PCEN = cpuclk_pcen[1];
+assign  o_CPUCLK_NCEN = cpuclk_ncen[1];
 
 always_ff @(posedge RCC.phiA) if(RCC.phiA_NCEN) begin
     cdiv_sr4[1:0] <= {cdiv_sr4[0], i_RST_n};
@@ -120,8 +129,6 @@ always_ff @(posedge RCC.phiA) if(RCC.phiA_NCEN) begin
     cpuclk_pcen <= {cpuclk_pcen[0], cdiv_sr4[6:4] == 3'b111};
     cpuclk_ncen <= {cpuclk_ncen[0], cdiv_sr4[6:4] == 3'b110};
 end
-
-
 
 
 

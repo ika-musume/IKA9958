@@ -13,6 +13,8 @@ assign  REG.regfile = regfile; //drive interface port
 
 
 assign regfile[9][0] = 1'b0;
+assign regfile[9][5:4] = 2'd0; //synchronization mode
+assign regfile[15][6] = 1'b0; //unknown
 
 
 endmodule

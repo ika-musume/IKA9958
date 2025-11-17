@@ -12,7 +12,9 @@ module IKA9958 #(parameter CM = 0) (
     input   wire                i_DLCLK_n, //multi V9958?
 
     /* CLOCK OUTPUTS */
-    output  wire                o_DHCLK_n, o_DLCLK_n, //open drain output
+    output  wire                o_DHCLK_n, o_DHCLK_n_PCEN, o_DHCLK_n_NCEN, //open drain output except the CENs
+    output  wire                o_DLCLK_n, o_DLCLK_n_PCEN, o_DLCLK_n_NCEN, //open drain output except the CENs
+    output  wire                o_CPUCLK_nVDS, o_CPUCLK_nVDS_PCEN, o_CPUCLK_nVDS_NCEN,
 
     /* RESET INPUT */
     input   wire                i_RST_n,
@@ -43,8 +45,16 @@ IKA9958_rcc #(.CM(CM)) u_rcc (
     .i_XTAL_NCEN                (i_XTAL_NCEN                ),
 
     .i_DLCLK_n                  (i_DLCLK_n                  ),
+
     .o_DHCLK_n                  (o_DHCLK_n                  ),
+    .o_DHCLK_n_PCEN             (o_DHCLK_n_PCEN             ),
+    .o_DHCLK_n_NCEN             (o_DHCLK_n_NCEN             ),
     .o_DLCLK_n                  (o_DLCLK_n                  ),
+    .o_DLCLK_n_PCEN             (o_DLCLK_n_PCEN             ),
+    .o_DLCLK_n_NCEN             (o_DLCLK_n_NCEN             ),
+    .o_CPUCLK                   (o_CPUCLK_nVDS              ),
+    .o_CPUCLK_PCEN              (                           ),
+    .o_CPUCLK_NCEN              (                           ),
 
     .RCC                        (if_rcc                     ),
     .REG                        (if_reg                     ),
