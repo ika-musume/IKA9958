@@ -30,6 +30,7 @@ module IKA9958 #(parameter CM = 0) (
 IKA9958_if_rcc  if_rcc();
 IKA9958_if_reg  if_reg();
 IKA9958_if_st   if_st();
+IKA9958_if_pla  if_pla();
 
 
 
@@ -84,6 +85,19 @@ IKA9958_st u_st (
     .RCC                        (if_rcc                     ),
     .REG                        (if_reg                     ),
     .ST                         (if_st                      )
+);
+
+
+
+///////////////////////////////////////////////////////////
+//////  PLA
+////
+
+IKA9958_pla u_pla (
+    .RCC                        (if_rcc                     ),
+    .REG                        (if_reg                     ),
+    .ST                         (if_st                      )
+    //.PLA                        (if_pla                     )
 );
 
 

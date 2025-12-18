@@ -86,26 +86,30 @@ assign  hpla[18] = hcntr == 9'd330;
 assign  hpla[19] = hcntr == 9'd336;
 assign  hpla[20] = hcntr == 9'd165;
 
-//SR latches(synchronous); default_nettype wire has been declared to sink unused output of the SRlatch modules
-//                   name     clk       cen            set                    reset         Q         nQ
-IKA9958_prim_srlatch u_gc027 (RCC.phiA, RCC.phiL_NCEN, |{hpla[3:2]         }, |{hpla[1]  }, gc027,    gc027_nc);
-IKA9958_prim_srlatch u_gc028 (RCC.phiA, RCC.phiL_NCEN, |{hpla[9:7]         }, |{hpla[5:4]}, gc028_nc, gc028   );
-IKA9958_prim_srlatch u_gc029 (RCC.phiA, RCC.phiL_NCEN, |{hpla[11], hpla[13]}, |{hpla[9:8]}, gc029,    gc029_nc);
-IKA9958_prim_srlatch u_gc030 (RCC.phiA, RCC.phiL_NCEN, |{hpla[16]          }, |{hpla[15] }, gc030_nc, gc030   );
-IKA9958_prim_srlatch u_gc031 (RCC.phiA, RCC.phiL_NCEN, |{hpla[18]          }, |{hpla[17] }, gc031_nc, gc031   );
-IKA9958_prim_srlatch u_gc021 (RCC.phiA, RCC.phiL_PCEN, |{hpla[12]          }, |{hpla[10] }, gc021_nc, gc021   ); //positive!
+//SR latches(synchronous); default_nettype wire has been declared to sink unused output of the SRlatch modules, nc means a dummy sink
+//               name     clk       cen            set                    reset         Q         nQ
+IKA9958_prim_srl u_gc027 (RCC.phiA, RCC.phiL_NCEN, |{hpla[3:2]         }, |{hpla[1]  }, gc027,    gc027_nc);
+IKA9958_prim_srl u_gc028 (RCC.phiA, RCC.phiL_NCEN, |{hpla[9:7]         }, |{hpla[5:4]}, gc028_nc, gc028   );
+IKA9958_prim_srl u_gc029 (RCC.phiA, RCC.phiL_NCEN, |{hpla[11], hpla[13]}, |{hpla[9:8]}, gc029,    gc029_nc);
+IKA9958_prim_srl u_gc030 (RCC.phiA, RCC.phiL_NCEN, |{hpla[16]          }, |{hpla[15] }, gc030_nc, gc030   );
+IKA9958_prim_srl u_gc031 (RCC.phiA, RCC.phiL_NCEN, |{hpla[18]          }, |{hpla[17] }, gc031_nc, gc031   );
+IKA9958_prim_srl u_gc021 (RCC.phiA, RCC.phiL_PCEN, |{hpla[12]          }, |{hpla[10] }, gc021_nc, gc021   ); //positive!
 
 //decoded signals (reset required)
 always_ff @(posedge RCC.phiA `ifdef IKA9958_SYNC_RST ) `else or negedge RCC.RST_async_n) begin `endif
     if(!RCC.RST_async_n) begin
         ST.gc024 <= 1'b0; //the actural chip doesn't have async reset
     end else begin if(RCC.phiL_NCEN) begin
-        ST.gc024 <= (REG.regfile[9][5:4] == 2'd0 ? ~hpla[14] : ~hpla[12]) | REG.regfile[15][6];
+        ST.gc024 <= (REG.S == 2'd0 ? ~hpla[14] : ~hpla[12]) | REG.FILE[15][6];
     end end
 end
 
+//decoded signals
+logic   [8:0]   hadd;
 always_ff @(posedge RCC.phiA) if(RCC.phiL_NCEN) begin
-
+    hadd         <= hcntr + {{5{REG.H[3]}}, REG.H}; //with sign extension
+    ST.hadd_eq23 <= hadd == 9'd23; //gc047
+    
 end
 
 
@@ -117,9 +121,10 @@ endmodule
 
 interface IKA9958_if_st;
 logic           gc024;
+logic           hadd_eq23;
 
 //clarify directionality
-modport drive   (output gc024);
-modport source  (input  gc024);
+modport drive   (output gc024, hadd_eq23);
+modport source  (input  gc024, hadd_eq23);
 endinterface
 

@@ -1,4 +1,4 @@
-module IKA9958_prim_srlatch (
+module IKA9958_prim_srl (
     input   wire                i_CLK, i_CEN, i_S, i_R,
     output  logic               o_Q, o_Q_n
 );

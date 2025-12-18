@@ -81,9 +81,9 @@ always_ff @(posedge RCC.phiA) begin
 `endif
     begin if(RCC.phiA_NCEN) begin
         clksync_z   <= ~i_DLCLK_n;
-        nor4_z      <= ~|{~cdiv_sr2[2], cdiv_sr2[1], ST.gc024, REG.regfile[9][0]};
+        nor4_z      <= ~|{~cdiv_sr2[2], cdiv_sr2[1], ST.gc024, REG.FILE[9][0]};
 
-        cdiv_sr0    <= {cdiv_sr0[1:0], clksync_z & REG.regfile[9][0]}; //This SR delays the DLCLK input
+        cdiv_sr0    <= {cdiv_sr0[1:0], clksync_z & REG.FILE[9][0]}; //This SR delays the DLCLK input
         cdiv_sr1    <= {cdiv_sr1[1:0], ~|{|{cdiv_sr1}, |{cdiv_sr0[2:1]}, nor4_z}}; //This SR acts as a ring counter(div4)
         cdiv_sr2    <= {cdiv_sr2[1:0], ~|{cdiv_sr1[1:0]}}; //This SR adds a delay for clock pause
 
@@ -105,7 +105,7 @@ assign  RCC.phiL_NCEN = (cdiv_sr1 == 3'b100) & RCC.phiA_NCEN;
 assign  o_DHCLK_n = ~ref_phiH;
 assign  o_DHCLK_n_PCEN = RCC.phiH_NCEN;
 assign  o_DHCLK_n_NCEN = RCC.phiH_PCEN;
-assign  o_DLCLK_n = ~ref_phiL | REG.regfile[9][0]; //R#9 bit0 DC
+assign  o_DLCLK_n = ~ref_phiL | REG.FILE[9][0]; //R#9 bit0 DC
 assign  o_DLCLK_n_PCEN = RCC.phiL_NCEN;
 assign  o_DLCLK_n_NCEN = RCC.phiL_PCEN;
 
@@ -155,7 +155,7 @@ wire            phiA_NCEN; //21.48MHz
 wire            phiH_PCEN, phiH_NCEN; //DHCLK, 10.74MHz
 wire            phiL_PCEN, phiL_NCEN; //DLCLK, 5.37MHz
 wire            RST_async_n;
-logic           RST_sync_n;
+wire            RST_sync_n;
 
 //clarify directionality
 modport drive   (output RST_async_n, RST_sync_n, phiA, phiA_NCEN, phiH_PCEN, phiH_NCEN, phiL_PCEN, phiL_NCEN);
