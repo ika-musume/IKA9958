@@ -18,7 +18,8 @@ module IKA9958 #(parameter CM = 0) (
 
     /* RESET INPUT */
     input   wire                i_RST_n,
-    input   wire                i_HRST_n
+    input   wire                i_HRST_n,
+    input   wire                i_VRST_n
 );
 
 
@@ -81,10 +82,12 @@ IKA9958_reg u_reg (
 
 IKA9958_st u_st (
     .i_HRST_n                   (i_HRST_n                   ),
+    .i_VRST_n                   (i_VRST_n                   ),
 
     .RCC                        (if_rcc                     ),
     .REG                        (if_reg                     ),
-    .ST                         (if_st                      )
+    .ST                         (if_st                      ),
+    .PLA                        (if_pla                     )
 );
 
 
@@ -96,8 +99,8 @@ IKA9958_st u_st (
 IKA9958_pla u_pla (
     .RCC                        (if_rcc                     ),
     .REG                        (if_reg                     ),
-    .ST                         (if_st                      )
-    //.PLA                        (if_pla                     )
+    .ST                         (if_st                      ),
+    .PLA                        (if_pla                     )
 );
 
 

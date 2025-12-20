@@ -41,7 +41,8 @@ IKA9958 #(.CM(1)) u_dut (
     .o_DLCLK_n                  (                           ),
 
     .i_RST_n                    (RST_n                      ),
-    .i_HRST_n                   (1'b1                       )
+    .i_HRST_n                   (1'b1                       ),
+    .i_VRST_n                   (1'b1                       )
 );
 
 

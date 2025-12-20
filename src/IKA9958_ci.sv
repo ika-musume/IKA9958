@@ -4,8 +4,8 @@
 
 module IKA9958_ci (
     /* CPU BUS CONTROL INPUTS */
-    input   wire        [1:0]   i_MODE,
-    input   wire                i_CSR_n, i_CSW_n,
+    input   logic       [1:0]   i_MODE,
+    input   logic               i_CSR_n, i_CSW_n,
 
     /* INTERFACES */
     IKA9958_if_rcc.drive        RCC, //reset and clock control
