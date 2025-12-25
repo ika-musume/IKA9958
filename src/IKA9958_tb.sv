@@ -30,7 +30,7 @@ initial begin
 end
 
 
-IKA9958 #(.CM(1)) u_dut (
+IKA9958 #(.CM(0)) u_dut (
     .i_XTAL1                    (CLK                        ),
     .o_XTAL2                    (                           ),
     .i_XTAL_NCEN                (NCEN                       ),

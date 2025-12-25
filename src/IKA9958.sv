@@ -16,6 +16,10 @@ module IKA9958 #(parameter CM = 0) (
     output  wire                o_DLCLK_n, o_DLCLK_n_PCEN, o_DLCLK_n_NCEN, //open drain output except the CENs
     output  wire                o_CPUCLK_nVDS, o_CPUCLK_nVDS_PCEN, o_CPUCLK_nVDS_NCEN,
 
+    /* VIDEO SYNCS */
+    output  wire                o_BLEO_BLK_n, o_BLEO_P_nS, //tri-level logic pin
+    output  wire                o_HSYNC_n, o_CSYNC_n,
+
     /* RESET INPUT */
     input   wire                i_RST_n,
     input   wire                i_HRST_n,
@@ -40,27 +44,27 @@ IKA9958_if_pla  if_pla();
 ////
 
 IKA9958_rcc #(.CM(CM)) u_rcc (
-    .i_RST_n                    (i_RST_n                    ),
+     .i_RST_n
     
-    .i_XTAL1                    (i_XTAL1                    ),
-    .o_XTAL2                    (o_XTAL2                    ),
-    .i_XTAL_NCEN                (i_XTAL_NCEN                ),
+    ,.i_XTAL1
+    ,.o_XTAL2
+    ,.i_XTAL_NCEN
 
-    .i_DLCLK_n                  (i_DLCLK_n                  ),
+    ,.i_DLCLK_n
 
-    .o_DHCLK_n                  (o_DHCLK_n                  ),
-    .o_DHCLK_n_PCEN             (o_DHCLK_n_PCEN             ),
-    .o_DHCLK_n_NCEN             (o_DHCLK_n_NCEN             ),
-    .o_DLCLK_n                  (o_DLCLK_n                  ),
-    .o_DLCLK_n_PCEN             (o_DLCLK_n_PCEN             ),
-    .o_DLCLK_n_NCEN             (o_DLCLK_n_NCEN             ),
-    .o_CPUCLK                   (o_CPUCLK_nVDS              ),
-    .o_CPUCLK_PCEN              (                           ),
-    .o_CPUCLK_NCEN              (                           ),
+    ,.o_DHCLK_n
+    ,.o_DHCLK_n_PCEN
+    ,.o_DHCLK_n_NCEN
+    ,.o_DLCLK_n
+    ,.o_DLCLK_n_PCEN
+    ,.o_DLCLK_n_NCEN
+    ,.o_CPUCLK                  (o_CPUCLK_nVDS              )
+    ,.o_CPUCLK_PCEN             (                           )
+    ,.o_CPUCLK_NCEN             (                           )
 
-    .RCC                        (if_rcc                     ),
-    .REG                        (if_reg                     ),
-    .ST                         (if_st                      )
+    ,.RCC                       (if_rcc                     )
+    ,.REG                       (if_reg                     )
+    ,.ST                        (if_st                      )
 );
 
 
@@ -70,8 +74,8 @@ IKA9958_rcc #(.CM(CM)) u_rcc (
 ////
 
 IKA9958_reg u_reg (
-    .RCC                        (if_rcc                     ),
-    .REG                        (if_reg                     )
+     .RCC                       (if_rcc                     )
+    ,.REG                       (if_reg                     )
 );
 
 
@@ -81,13 +85,18 @@ IKA9958_reg u_reg (
 ////
 
 IKA9958_st u_st (
-    .i_HRST_n                   (i_HRST_n                   ),
-    .i_VRST_n                   (i_VRST_n                   ),
+     .i_HRST_n
+    ,.i_VRST_n
 
-    .RCC                        (if_rcc                     ),
-    .REG                        (if_reg                     ),
-    .ST                         (if_st                      ),
-    .PLA                        (if_pla                     )
+    ,.o_BLEO_BLK_n
+    ,.o_BLEO_P_nS
+    ,.o_HSYNC_n
+    ,.o_CSYNC_n
+
+    ,.RCC                       (if_rcc                     )
+    ,.REG                       (if_reg                     )
+    ,.ST                        (if_st                      )
+    ,.PLA                       (if_pla                     )
 );
 
 
@@ -97,10 +106,10 @@ IKA9958_st u_st (
 ////
 
 IKA9958_pla u_pla (
-    .RCC                        (if_rcc                     ),
-    .REG                        (if_reg                     ),
-    .ST                         (if_st                      ),
-    .PLA                        (if_pla                     )
+     .RCC                       (if_rcc                     )
+    ,.REG                       (if_reg                     )
+    ,.ST                        (if_st                      )
+    ,.PLA                       (if_pla                     )
 );
 
 
