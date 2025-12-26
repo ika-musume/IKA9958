@@ -91,9 +91,9 @@ assign  hpla[20] = hcntr == 9'd165;
 
 //decoded signals (sync SR latch); default_nettype wire has been declared to sink unused output of the SRlatch modules, nc means a dummy sink
 //               name     clk       cen            set                    reset         Q         nQ
-IKA9958_prim_srl u_gc027 (RCC.phiA, RCC.phiL_NCEN, |{hpla[3:2]         }, |{hpla[1]  }, gc027,    gc027_nc);
+IKA9958_prim_srl u_gc027 (RCC.phiA, RCC.phiL_NCEN, |{hpla[3:2]         }, |{hpla[1]  }, gc027   , gc027_nc);
 IKA9958_prim_srl u_gc028 (RCC.phiA, RCC.phiL_NCEN, |{hpla[9:7]         }, |{hpla[5:4]}, gc028_nc, gc028   );
-IKA9958_prim_srl u_gc029 (RCC.phiA, RCC.phiL_NCEN, |{hpla[11], hpla[13]}, |{hpla[9:8]}, gc029,    gc029_nc);
+IKA9958_prim_srl u_gc029 (RCC.phiA, RCC.phiL_NCEN, |{hpla[11], hpla[13]}, |{hpla[9:8]}, gc029   , gc029_nc);
 IKA9958_prim_srl u_gc030 (RCC.phiA, RCC.phiL_NCEN, |{hpla[16]          }, |{hpla[15] }, gc030_nc, gc030   );
 IKA9958_prim_srl u_gc031 (RCC.phiA, RCC.phiL_NCEN, |{hpla[18]          }, |{hpla[17] }, gc031_nc, gc031   );
 IKA9958_prim_srl u_gc021 (RCC.phiA, RCC.phiL_PCEN, |{hpla[12]          }, |{hpla[10] }, gc021_nc, gc021   ); //positive!
@@ -103,7 +103,7 @@ always_ff @(posedge RCC.phiA `ifdef IKA9958_SYNC_RST ) `else or negedge RCC.RST_
     if(!RCC.RST_async_n) begin
         ST.gc024 <= 1'b0; //the actural chip doesn't have reset feature
     end else begin if(RCC.phiL_NCEN) begin
-        ST.gc024 <= (REG.file.S == 2'd0 ? ~hpla[14] : ~hpla[12]) | REG.file.array[15][6];
+        ST.gc024 <= (REG.Data.S == 2'd0 ? ~hpla[14] : ~hpla[12]) | REG.arr[15][6];
     end end
 end
 
@@ -115,7 +115,7 @@ always_ff @(posedge RCC.phiA) if(RCC.phiL_NCEN) begin
     hcntr_337    <= hpla[19];
     hcntr_166    <= hpla[20];
 
-    hadd         <= hcntr + {{5{REG.file.H[3]}}, REG.file.H}; //with sign extension
+    hadd         <= hcntr + {{5{REG.Data.H[3]}}, REG.Data.H}; //with sign extension
     ST.hadd_eq23 <= hadd == 9'd23; //gc047
 end
 
@@ -172,34 +172,34 @@ end
 ////
 
 //assign PLA outputs
-assign  vpla[0]  = vcntr == 9'd0   && !REG.file.IL &&  REG.file.NT_n           ;
-assign  vpla[1]  = vcntr == 9'd0   && !REG.file.IL && !REG.file.NT_n           ;
-assign  vpla[2]  = vcntr == 9'd312 && !REG.file.IL &&  REG.file.NT_n  && !field;
-assign  vpla[3]  = vcntr == 9'd0   &&  REG.file.IL && !REG.file.NT_n  && !field; 
-assign  vpla[4]  = vcntr == 9'd0   &&  REG.file.IL &&  REG.file.NT_n  && !field; 
-assign  vpla[5]  = vcntr == 9'd312 &&  REG.file.IL &&  REG.file.NT_n  && !field; 
-assign  vpla[6]  = vcntr == 9'd312 &&  REG.file.IL &&  REG.file.NT_n  && !field; 
-assign  vpla[7]  = vcntr == 9'd262 &&  REG.file.IL && !REG.file.NT_n  && !field;
-assign  vpla[8]  = vcntr == 9'd261 && !REG.file.IL && !REG.file.NT_n  && !field;
-assign  vpla[9]  = vcntr == 9'd3   && !REG.file.IL                        ;
-assign  vpla[10] = vcntr == 9'd3   &&  REG.file.IL               && !field;
-/* ------------------------------------------------------------------------ */
-assign  vpla[11] = vcntr == 9'd262 &&  REG.file.IL && !REG.file.NT_n  && !field;
-assign  vpla[12] = vcntr == 9'd2   &&  REG.file.IL               &&  field;
-assign  vpla[13] = vcntr == 9'd6   && !REG.file.IL                        ;
-assign  vpla[14] = vcntr == 9'd312 && !REG.file.IL &&  REG.file.NT_n  &&  field;
-assign  vpla[15] = vcntr == 9'd6   &&  REG.file.IL               && !field;
-assign  vpla[16] = vcntr == 9'd5   &&  REG.file.IL               &&  field;
-assign  vpla[17] = vcntr == 9'd311 &&  REG.file.IL &&  REG.file.NT_n  &&  field;
-assign  vpla[18] = vcntr == 9'd310 && !REG.file.IL &&  REG.file.NT_n           ;
-assign  vpla[19] = vcntr == 9'd309 &&  REG.file.IL &&  REG.file.NT_n  &&  field;
-/* ------------------------------------------------------------------------ */
-assign  vpla[20] = vcntr == 9'd261 && !REG.file.IL && !REG.file.NT_n  &&  field;
-assign  vpla[21] = vcntr == 9'd259 && !REG.file.IL && !REG.file.NT_n           ;
-assign  vpla[22] = vcntr == 9'd259 &&  REG.file.IL && !REG.file.NT_n  &&  field;
-assign  vpla[23] = vcntr == 9'd261 &&  REG.file.IL && !REG.file.NT_n  &&  field;
-assign  vpla[24] = vcntr == 9'd259 &&  REG.file.IL && !REG.file.NT_n  && !field;
-assign  vpla[25] = vcntr == 9'd309 &&  REG.file.IL &&  REG.file.NT_n  && !field;
+assign  vpla[0]  = vcntr == 9'd0   && !REG.Data.IL &&  REG.Data.NT_n           ;
+assign  vpla[1]  = vcntr == 9'd0   && !REG.Data.IL && !REG.Data.NT_n           ;
+assign  vpla[2]  = vcntr == 9'd312 && !REG.Data.IL &&  REG.Data.NT_n  && !field;
+assign  vpla[3]  = vcntr == 9'd0   &&  REG.Data.IL && !REG.Data.NT_n  && !field; 
+assign  vpla[4]  = vcntr == 9'd0   &&  REG.Data.IL &&  REG.Data.NT_n  && !field; 
+assign  vpla[5]  = vcntr == 9'd312 &&  REG.Data.IL &&  REG.Data.NT_n  && !field; 
+assign  vpla[6]  = vcntr == 9'd312 &&  REG.Data.IL &&  REG.Data.NT_n  && !field; 
+assign  vpla[7]  = vcntr == 9'd262 &&  REG.Data.IL && !REG.Data.NT_n  && !field;
+assign  vpla[8]  = vcntr == 9'd261 && !REG.Data.IL && !REG.Data.NT_n  && !field;
+assign  vpla[9]  = vcntr == 9'd3   && !REG.Data.IL                        ;
+assign  vpla[10] = vcntr == 9'd3   &&  REG.Data.IL                    && !field;
+/* -------------------------------------------------------------------------- */
+assign  vpla[11] = vcntr == 9'd262 &&  REG.Data.IL && !REG.Data.NT_n  && !field;
+assign  vpla[12] = vcntr == 9'd2   &&  REG.Data.IL                    &&  field;
+assign  vpla[13] = vcntr == 9'd6   && !REG.Data.IL                        ;
+assign  vpla[14] = vcntr == 9'd312 && !REG.Data.IL &&  REG.Data.NT_n  &&  field;
+assign  vpla[15] = vcntr == 9'd6   &&  REG.Data.IL                    && !field;
+assign  vpla[16] = vcntr == 9'd5   &&  REG.Data.IL                    &&  field;
+assign  vpla[17] = vcntr == 9'd311 &&  REG.Data.IL &&  REG.Data.NT_n  &&  field;
+assign  vpla[18] = vcntr == 9'd310 && !REG.Data.IL &&  REG.Data.NT_n           ;
+assign  vpla[19] = vcntr == 9'd309 &&  REG.Data.IL &&  REG.Data.NT_n  &&  field;
+/* -------------------------------------------------------------------------- */
+assign  vpla[20] = vcntr == 9'd261 && !REG.Data.IL && !REG.Data.NT_n  &&  field;
+assign  vpla[21] = vcntr == 9'd259 && !REG.Data.IL && !REG.Data.NT_n           ;
+assign  vpla[22] = vcntr == 9'd259 &&  REG.Data.IL && !REG.Data.NT_n  &&  field;
+assign  vpla[23] = vcntr == 9'd261 &&  REG.Data.IL && !REG.Data.NT_n  &&  field;
+assign  vpla[24] = vcntr == 9'd259 &&  REG.Data.IL && !REG.Data.NT_n  && !field;
+assign  vpla[25] = vcntr == 9'd309 &&  REG.Data.IL &&  REG.Data.NT_n  && !field;
 assign  vpla[26] = vcntr == 9'd16                                    ;
 assign  vpla[27] = vcntr == 9'd6                                     ;
 
@@ -209,7 +209,7 @@ wire            gc079 = (hcntr_337 & |{vpla[9] , vpla[10]                    }) 
 wire            gc080 = (hcntr_337 & |{vpla[13], vpla[15]                    }) | (hcntr_166 & |{vpla[16]          });
 wire            gc081 = (hcntr_337 & |{vpla[18], vpla[19], vpla[21], vpla[22]}) | (hcntr_166 & |{vpla[24], vpla[25]});
 wire            gc082 = (hcntr_337 &   vpla[26]                               )                                      ;
-wire            vadd_eq15 = (vcntr + {{5{REG.file.V[3]}}, REG.file.V}) == 9'd15;
+wire            vadd_eq15 = (vcntr + {{5{REG.Data.V[3]}}, REG.Data.V}) == 9'd15;
 
 //decoded signals (sync SR latch)
 //               name     clk       cen            set    reset  Q          nQ
@@ -264,7 +264,7 @@ always_ff @(posedge RCC.phiA) if(RCC.phiL_NCEN) begin
     o_BLEO_BLK_n <= gc087_z & gc031; //blank
     o_BLEO_P_nS  <= ~field; //field
 
-    o_HSYNC_n    <= REG.file.S == 2'd0 ? gc039 : gc037;
+    o_HSYNC_n    <= REG.Data.S == 2'd0 ? gc039 : gc037;
     o_CSYNC_n    <= gc041;
 end
 
