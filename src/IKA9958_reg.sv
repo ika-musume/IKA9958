@@ -32,9 +32,9 @@ typedef struct {
     logic           DC, NT_n, IL;
     logic   [1:0]   S;
     logic   [3:0]   H, V;
-} t_RegisterData;
+} RegData_t;
 
-t_RegisterData  Data;
+RegData_t  Data;
 logic   [7:0]   arr [0:63];
 
 //data breakout
@@ -46,13 +46,7 @@ assign  Data.S      = arr[9][5:4];                          //synchronization mo
 assign  Data.H      = arr[18][3:0];                         //H position adjust
 assign  Data.V      = arr[18][7:4];                         //V position adjust
 
-//make flags
-wire            TMODE      = Data.M == T1 || Data.M == T2;
-//wire            GMODE4567  = Data.M == T1 || Data.M == T2;
-//wire            GMODE34567 = Data.M == T1 || Data.M == T2;
-
-
 //clarify directionality
 modport drive   (output arr);
-modport read    (input  Data, arr, TMODE);
+modport read    (input  Data, arr);
 endinterface
